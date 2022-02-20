@@ -26,6 +26,11 @@ export class AwsCdkMongodbPerformanceStack extends Stack {
       'allow SSH access from anywhere',
     );
 
+    mongoSG.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(27017),
+      'allow connection to MongoDB',
+    );
 
     const ec2Instance = new ec2.Instance(this, 'ec2-instance', {
       vpc,
