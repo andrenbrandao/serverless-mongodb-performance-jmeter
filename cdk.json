@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/aws-cdk-ec2-mongodb-performance.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/aws-cdk-mongodb-performance.ts",
   "watch": {
     "include": [
       "**"

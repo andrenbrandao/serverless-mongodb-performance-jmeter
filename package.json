@@ -1,8 +1,8 @@
 {
-  "name": "aws-cdk-ec2-mongodb-performance",
+  "name": "aws-cdk-mongodb-performance",
   "version": "0.1.0",
   "bin": {
-    "aws-cdk-ec2-mongodb-performance": "bin/aws-cdk-ec2-mongodb-performance.js"
+    "aws-cdk-mongodb-performance": "bin/aws-cdk-mongodb-performance.js"
   },
   "scripts": {
     "build": "tsc",
@@ -13,9 +13,9 @@
   "devDependencies": {
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
+    "aws-cdk": "2.13.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.2.0",
-    "aws-cdk": "2.13.0",
     "ts-node": "^9.0.0",
     "typescript": "~3.9.7"
   },

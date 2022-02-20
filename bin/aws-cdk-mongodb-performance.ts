@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { AwsCdkEc2MongodbPerformanceStack } from '../lib/aws-cdk-ec2-mongodb-performance-stack';
+import { AwsCdkMongodbPerformanceStack } from '../lib/aws-cdk-mongodb-performance-stack';
 
 const app = new cdk.App();
-new AwsCdkEc2MongodbPerformanceStack(app, 'AwsCdkEc2MongodbPerformanceStack', {
+new AwsCdkMongodbPerformanceStack(app, 'AwsCdkMongodbPerformanceStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
