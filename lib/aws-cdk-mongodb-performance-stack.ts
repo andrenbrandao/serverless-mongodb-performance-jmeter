@@ -32,12 +32,19 @@ export class AwsCdkMongodbPerformanceStack extends Stack {
       'allow connection to MongoDB',
     );
 
-    const ec2Instance = new ec2.Instance(this, 'ec2-instance', {
+    // Create three instances
+    this.createEc2Instance({ name: 'mongodb0', securityGroup: mongoSG, vpc: vpc })
+    this.createEc2Instance({ name: 'mongodb1', securityGroup: mongoSG, vpc: vpc })
+    this.createEc2Instance({ name: 'mongodb2', securityGroup: mongoSG, vpc: vpc })
+  }
+
+  createEc2Instance({ name, securityGroup, vpc }: { name: string, securityGroup: ec2.SecurityGroup, vpc: ec2.Vpc }) {
+    const ec2Instance = new ec2.Instance(this, name, {
       vpc,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PUBLIC,
       },
-      securityGroup: mongoSG,
+      securityGroup: securityGroup,
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.T2,
         ec2.InstanceSize.MICRO,
