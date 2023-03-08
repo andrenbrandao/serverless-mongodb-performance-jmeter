@@ -1,6 +1,6 @@
-# Welcome to your CDK TypeScript project
+# Creating a MongoDB Cluster in AWS
 
-This is a blank project for TypeScript development with CDK.
+This project has the goal of creating a MongoDB Cluster in AWS with a single deploy command. This code is going to be used in an article to talk about the problems with O(N^2) algorithms in production systems and how to load test APIs with jMeter.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
