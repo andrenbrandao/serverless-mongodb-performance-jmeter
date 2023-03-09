@@ -33,12 +33,12 @@ export class AwsCdkMongodbPerformanceStack extends Stack {
     );
 
     // Create three instances
-    this.createEc2Instance({ name: 'mongodb0', securityGroup: mongoSG, vpc: vpc })
-    this.createEc2Instance({ name: 'mongodb1', securityGroup: mongoSG, vpc: vpc })
-    this.createEc2Instance({ name: 'mongodb2', securityGroup: mongoSG, vpc: vpc })
+    this.createEc2Instance({ name: 'mongodb0', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.100' })
+    this.createEc2Instance({ name: 'mongodb1', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.101' })
+    this.createEc2Instance({ name: 'mongodb2', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.102' })
   }
 
-  createEc2Instance({ name, securityGroup, vpc }: { name: string, securityGroup: ec2.SecurityGroup, vpc: ec2.Vpc }) {
+  createEc2Instance({ name, securityGroup, vpc, privateIpAddress }: { name: string, securityGroup: ec2.SecurityGroup, vpc: ec2.Vpc, privateIpAddress: string }) {
     const ec2Instance = new ec2.Instance(this, name, {
       vpc,
       vpcSubnets: {
@@ -53,6 +53,7 @@ export class AwsCdkMongodbPerformanceStack extends Stack {
         generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
       }),
       keyName: 'aws-ec2-key-pair',
+      privateIpAddress,
     });
 
     const userDataScript = readFileSync('./lib/user-data.sh', 'utf8');

@@ -10,7 +10,7 @@ enabled=1
 gpgkey=https://www.mongodb.org/static/pgp/server-5.0.asc
 " > /etc/yum.repos.d/mongodb-org-5.0.repo
 
-yum install -y mongodb-org
+yum install -y mongodb-org-5.0.14 mongodb-org-database-5.0.14 mongodb-org-server-5.0.14 mongodb-org-shell-5.0.14 mongodb-org-mongos-5.0.14 mongodb-org-tools-5.0.14
 
 echo "
 # for documentation of all options, see:
@@ -40,6 +40,9 @@ processManagement:
 net:
   port: 27017
   bindIp: 0.0.0.0  # Enter 0.0.0.0,:: to bind to all IPv4 and IPv6 addresses or, alternatively, use the net.bindIpAll setting.
+
+replication:
+  replSetName: \"rs0\"
 " > /etc/mongod.conf
 
 systemctl start mongod
