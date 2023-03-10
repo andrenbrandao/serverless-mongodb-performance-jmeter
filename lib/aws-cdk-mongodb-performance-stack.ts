@@ -33,12 +33,15 @@ export class AwsCdkMongodbPerformanceStack extends Stack {
     );
 
     // Create three instances
-    this.createEc2Instance({ name: 'mongodb0', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.100' })
-    this.createEc2Instance({ name: 'mongodb1', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.101' })
-    this.createEc2Instance({ name: 'mongodb2', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.102' })
+    const userDataPath = './lib/user-data.sh'
+    const mainInstanceDataPath = './lib/main-instance-user-data.sh'
+
+    this.createEc2Instance({ name: 'mongodb0', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.100', userDataPath: mainInstanceDataPath })
+    this.createEc2Instance({ name: 'mongodb1', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.101', userDataPath })
+    this.createEc2Instance({ name: 'mongodb2', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.102', userDataPath })
   }
 
-  createEc2Instance({ name, securityGroup, vpc, privateIpAddress }: { name: string, securityGroup: ec2.SecurityGroup, vpc: ec2.Vpc, privateIpAddress: string }) {
+  createEc2Instance({ name, securityGroup, vpc, privateIpAddress, userDataPath }: { name: string, securityGroup: ec2.SecurityGroup, vpc: ec2.Vpc, privateIpAddress: string, userDataPath: string }) {
     const ec2Instance = new ec2.Instance(this, name, {
       vpc,
       vpcSubnets: {
@@ -56,7 +59,7 @@ export class AwsCdkMongodbPerformanceStack extends Stack {
       privateIpAddress,
     });
 
-    const userDataScript = readFileSync('./lib/user-data.sh', 'utf8');
+    const userDataScript = readFileSync(userDataPath, 'utf8');
     ec2Instance.addUserData(userDataScript);
   }
 }
