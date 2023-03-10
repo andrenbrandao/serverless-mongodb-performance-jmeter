@@ -47,7 +47,7 @@ replication:
 
 systemctl start mongod
 
-sleep 30
+sleep 60
 
 mongosh << EOF
 rs.initiate(
