@@ -47,7 +47,20 @@ replication:
 
 systemctl start mongod
 
-sleep 60
+echo "Starting replica set initialization"
+
+until mongo --host 10.0.0.101 --eval "print(\"waited for connection\")"
+do
+   sleep 2
+done
+
+until mongo --host 10.0.0.102 --eval "print(\"waited for connection\")"
+do
+   sleep 2
+done
+
+echo "Connection finished"
+echo "Creating replica set"
 
 mongosh << EOF
 rs.initiate(
@@ -60,3 +73,5 @@ members: [
 ]
 })
 EOF
+
+echo "Replica set created"
