@@ -8,7 +8,9 @@ export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['**/*.spec.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/config/testing/jest.setup.ts'],
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/src/$1',
   },
+  setupFiles: ['<rootDir>/jest.setEnvVars.js'],
 };

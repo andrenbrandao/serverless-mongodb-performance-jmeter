@@ -21,7 +21,7 @@ const opts: ConnectOptions = {
 };
 
 const connect = async (): Promise<void> => {
-  mongoServer = new MongoMemoryServer({
+  mongoServer = await MongoMemoryServer.create({
     instance: { dbName: 'mongodb-test' },
   });
   const mongoUri = await mongoServer.getUri();
