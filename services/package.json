@@ -13,16 +13,16 @@
     "prettier": "prettier --write '*/**/*.{js,ts}'"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@middy/core": "^1.5.0",
     "@middy/http-json-body-parser": "^1.5.0",
     "mongoose": "^5.12.7",
     "source-map-support": "^0.5.19",
-    "winston": "^3.3.3",
-    "@faker-js/faker": "^7.6.0"
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.21.0",
-    "@types/aws-lambda": "^8.10.64",
+    "@types/aws-lambda": "^8.10.114",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.6",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
@@ -38,6 +38,7 @@
     "jest": "^26.6.3",
     "json-schema-to-ts": "^1.4.1",
     "lint-staged": "^10.5.3",
+    "mock-aws-events": "^1.0.1",
     "mongodb-memory-server": "^6.9.6",
     "prettier": "^2.2.1",
     "serverless": "2.68.0",
