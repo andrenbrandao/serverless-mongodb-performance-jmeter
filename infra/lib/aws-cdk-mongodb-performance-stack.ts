@@ -7,6 +7,7 @@ export class AwsCdkMongodbPerformanceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    // Create VPC
     const vpc = new ec2.Vpc(this, 'mongodb-vpc', {
       cidr: '10.0.0.0/16',
       natGateways: 0,
@@ -15,6 +16,13 @@ export class AwsCdkMongodbPerformanceStack extends Stack {
       ]
     })
 
+    // Create Lambda Security Group
+    const lambdaSG = new ec2.SecurityGroup(this, 'lambda-sg', {
+      vpc,
+      allowAllOutbound: true,
+    })
+
+    // Create MongoDB Instances Security Group
     const mongoSG = new ec2.SecurityGroup(this, 'mongoserver-sg', {
       vpc,
       allowAllOutbound: true,
@@ -40,9 +48,14 @@ export class AwsCdkMongodbPerformanceStack extends Stack {
     const secondaryNode1 = this.createEc2Instance({ name: 'mongodb1', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.101', userDataPath })
     const secondaryNode2 = this.createEc2Instance({ name: 'mongodb2', securityGroup: mongoSG, vpc: vpc, privateIpAddress: '10.0.0.102', userDataPath })
 
+    // Export MongoDB IPs
     new CfnOutput(this, 'PrimaryPublicIP', {value: primaryNode.instancePublicIp, description: 'MongoDB Primary node public ip', exportName: 'mongodb-primary-public-ip'})
     new CfnOutput(this, 'Secondary1PublicIP', {value: secondaryNode1.instancePublicIp, description: 'MongoDB Secondary1 node public ip', exportName: 'mongodb-secondary1-public-ip'})
     new CfnOutput(this, 'Secondary2PublicIP', {value: secondaryNode2.instancePublicIp, description: 'MongoDB Secondary2 node public ip', exportName: 'mongodb-secondary2-public-ip'})
+
+    // Export VPC Public Subnet and Lambda Security Group
+    new CfnOutput(this, 'SubnetId', {value: vpc.publicSubnets[0].subnetId, description: "Public Subnet Id", exportName: 'vpc-public-subnet-id' })
+    new CfnOutput(this, 'LambdaSecurityGroup', {value: lambdaSG.securityGroupId, description: "Lambda Security Group Id", exportName: 'lambda-security-group-id' })
   }
 
   createEc2Instance({ name, securityGroup, vpc, privateIpAddress, userDataPath }: { name: string, securityGroup: ec2.SecurityGroup, vpc: ec2.Vpc, privateIpAddress: string, userDataPath: string }) {
