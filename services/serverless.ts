@@ -1,10 +1,10 @@
 /* eslint-disable no-template-curly-in-string */
 import type { AWS } from '@serverless/typescript';
 
-import { hello } from './src/functions';
+import { hello, seed } from './src/functions';
 
 const serverlessConfiguration: AWS = {
-  service: 'serverless-typescript',
+  service: 'serverless-mongodb-performance',
   frameworkVersion: '2',
   useDotenv: true,
   custom: {
@@ -57,6 +57,11 @@ const serverlessConfiguration: AWS = {
   ],
   provider: {
     name: 'aws',
+    stage: "${opt:stage, 'staging'}",
+    vpc: {
+      securityGroupIds: [{ 'Fn::ImportValue': 'lambda-security-group-id' }],
+      subnetIds: [{ 'Fn::ImportValue': 'vpc-public-subnet-id' }],
+    },
     runtime: 'nodejs14.x',
     iamRoleStatements: [
       {
@@ -84,7 +89,7 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  functions: { hello },
+  functions: { hello, seed },
 };
 
 module.exports = serverlessConfiguration;

@@ -4,6 +4,9 @@ import { logger } from '@/shared/logger';
 // See API docs: http://mongoosejs.com/docs/lambda.html
 let cacheDB: Connection;
 
+const MONGODB_URI =
+  'mongodb://10.0.0.100:27017,10.0.0.101:27017,10.0.0.102:27017/database?replicaSet=rs0';
+
 const getConnection = async (): Promise<Connection> => {
   if (cacheDB && cacheDB.readyState === 1) {
     logger.info('Reusing existing connection...');
@@ -11,7 +14,7 @@ const getConnection = async (): Promise<Connection> => {
   }
 
   try {
-    const mongo = await mongoose.connect(process.env.MONGODB_URI, {
+    const mongo = await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
