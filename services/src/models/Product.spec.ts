@@ -8,7 +8,7 @@ it('should be able to create a new product', async () => {
       'The perfect exercise tool for burning calories and improving coordination',
   });
 
-  const productSaved = await Product.findOne();
+  const productSaved = await Product.findOne().lean();
 
   expect(productSaved).toMatchObject({
     sku: '123456',
