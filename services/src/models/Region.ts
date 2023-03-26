@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import { IProduct } from './Product';
 
-export interface IRegion {
+export interface IRegion extends Document {
   name: string;
   products: {
     sku: IProduct['sku'];

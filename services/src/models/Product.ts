@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
-export interface IProduct {
+export interface IProduct extends Document {
   sku: string;
   name: string;
   description: string;
