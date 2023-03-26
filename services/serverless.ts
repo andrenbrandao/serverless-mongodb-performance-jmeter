@@ -1,7 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import type { AWS } from '@serverless/typescript';
 
-import { hello, seed, getProducts, getProductsByRegion } from './src/functions';
+import { seed, getProducts, getProductsByRegion } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'serverless-mongodb-performance',
@@ -89,7 +89,7 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  functions: { hello, seed, getProducts, getProductsByRegion },
+  functions: { seed, getProducts, getProductsByRegion },
 };
 
 module.exports = serverlessConfiguration;
