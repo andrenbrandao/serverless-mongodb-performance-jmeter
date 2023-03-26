@@ -5,15 +5,19 @@ import { formatJSONResponse } from '@/libs/apiGateway';
 import { middyfy } from '@/libs/lambda';
 import { getConnection } from '@/libs/mongodb';
 import Region from '@/models/Region';
+import mongoose from 'mongoose';
 
-const getProductsByRegion: APIGatewayProxyHandler = async (_, context) => {
+const getProductsByRegion: APIGatewayProxyHandler = async (event, context) => {
   // Make sure to add this so you can re-use `conn` between function calls.
   // Also needs this so that the lambda won't keep hanging with the open connection.
   // https://mongoosejs.com/docs/lambda.html
   context.callbackWaitsForEmptyEventLoop = false;
 
+  const { id } = event.pathParameters;
+
   await getConnection();
   const products = await Region.aggregate([
+    { $match: { _id: new mongoose.Types.ObjectId(id) } },
     {
       $unwind: '$products',
     },

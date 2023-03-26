@@ -14,11 +14,10 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 
 let mongoServer: MongoMemoryServer;
 const opts: ConnectOptions = {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
+  autoIndex: true,
+  bufferCommands: false, // Disable mongoose buffering
 };
+mongoose.set('strictQuery', false);
 
 const connect = async (): Promise<void> => {
   mongoServer = await MongoMemoryServer.create({

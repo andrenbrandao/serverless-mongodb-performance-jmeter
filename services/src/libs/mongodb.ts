@@ -3,6 +3,7 @@ import { logger } from '@/shared/logger';
 
 // See API docs: http://mongoosejs.com/docs/lambda.html
 let cacheDB: Connection;
+mongoose.set('strictQuery', false);
 
 const MONGODB_URI =
   'mongodb://10.0.0.100:27017,10.0.0.101:27017,10.0.0.102:27017/database?replicaSet=rs0';
@@ -14,15 +15,12 @@ const getConnection = async (): Promise<Connection> => {
   }
 
   try {
-    const mongo = await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
+    await mongoose.connect(MONGODB_URI, {
+      autoIndex: true,
       bufferCommands: false, // Disable mongoose buffering
-      bufferMaxEntries: 0, // and MongoDB driver buffering
     });
 
-    cacheDB = mongo.connection;
+    cacheDB = mongoose.connection;
     logger.info('Connected successfully to MongoDB!');
 
     return cacheDB;

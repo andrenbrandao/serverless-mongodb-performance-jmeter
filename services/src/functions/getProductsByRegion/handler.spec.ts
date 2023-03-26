@@ -37,6 +37,11 @@ describe('Get Products By Region Handler', () => {
       ],
     });
 
+    await Region.create({
+      name: 'Rio',
+      products: [{ sku: '222222', price: 250.99 }],
+    });
+
     const event = createEvent('aws:apiGateway', {
       pathParameters: { id: region.id },
     });

@@ -16,7 +16,7 @@
     "@faker-js/faker": "^7.6.0",
     "@middy/core": "^1.5.0",
     "@middy/http-json-body-parser": "^1.5.0",
-    "mongoose": "^5.12.7",
+    "mongoose": "^6.0.0",
     "source-map-support": "^0.5.19",
     "winston": "^3.3.3"
   },
