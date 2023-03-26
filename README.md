@@ -1,4 +1,4 @@
-# Simple E-commerce Example - How to Fix Performance Bottlenecks in MongoDB with JMeter
+# Numart - Simple e-commerce app
 
 This code is used in the article "How to Fix Performance Bottlenecks in MongoDB with JMeter".
 
