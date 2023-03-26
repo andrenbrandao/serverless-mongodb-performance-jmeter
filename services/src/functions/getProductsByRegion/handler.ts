@@ -14,6 +14,7 @@ const getProductsByRegion: APIGatewayProxyHandler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const { id } = event.pathParameters;
+  const { limit = 100 } = event.queryStringParameters || {};
 
   await getConnection();
   const products = await Region.aggregate([
@@ -32,6 +33,7 @@ const getProductsByRegion: APIGatewayProxyHandler = async (event, context) => {
     {
       $unwind: '$products.product',
     },
+    { $limit: Number(limit) },
     {
       $project: {
         _id: '$products.product._id',
