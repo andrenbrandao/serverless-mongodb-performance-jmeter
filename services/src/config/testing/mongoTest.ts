@@ -42,7 +42,11 @@ const disconnect = async (): Promise<void> => {
 const clearDatabase = async (): Promise<void> => {
   const { collections } = mongoose.connection;
 
-  Object.values(collections).forEach((collection) => collection.deleteMany({}));
+  const promises = Object.values(collections).map((collection) =>
+    collection.deleteMany({}),
+  );
+
+  await Promise.all(promises);
 };
 
 export { connect, disconnect, clearDatabase };

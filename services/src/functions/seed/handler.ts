@@ -18,8 +18,10 @@ const seed: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   context.callbackWaitsForEmptyEventLoop = false;
 
   const { numProductsPerRegion = 10000 } = event.body || {};
+  const { optimized = false } = event.queryStringParameters || {};
+  const optimizedFlag = optimized === 'true';
 
-  await createRegionsWithProducts(numProductsPerRegion);
+  await createRegionsWithProducts(numProductsPerRegion, optimizedFlag);
 
   return formatJSONResponse({
     message: 'Seed successfully generated!',

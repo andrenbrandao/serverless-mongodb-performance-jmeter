@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
 import { faker } from '@faker-js/faker';
 import { getConnection } from '@/libs/mongodb';
@@ -8,6 +9,7 @@ import { logger } from '@/shared/logger';
 const createProductsForRegion = async (
   region: IRegion,
   numProducts: number,
+  optimized: boolean,
 ) => {
   logger.info(`Creating ${numProducts} products for region ${region.name}`);
 
@@ -15,17 +17,29 @@ const createProductsForRegion = async (
   const productPricesData = [];
   for (let i = 0; i < numProducts; i += 1) {
     const sku = faker.random.alpha({ count: 8, casing: 'upper' });
-    products.push(
-      new Product({
+    const price = faker.commerce.price();
+    let product;
+
+    if (optimized) {
+      product = new Product({
         sku,
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
-      }),
-    );
+        regions: [{ _id: region._id, price }],
+      });
+    } else {
+      product = new Product({
+        sku,
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+      });
+    }
+
+    products.push(product);
 
     productPricesData.push({
       sku,
-      price: faker.commerce.price(),
+      price,
     });
   }
 
@@ -45,6 +59,7 @@ const createProductsForRegion = async (
 
 const createRegionsWithProducts = async (
   numProductsPerRegion = 10000,
+  optimized = false,
 ): Promise<void> => {
   logger.info('Connecting to mongodb...');
   await getConnection();
@@ -61,7 +76,7 @@ const createRegionsWithProducts = async (
     products: [],
   });
 
-  await createProductsForRegion(alaskaRegion, numProductsPerRegion);
+  await createProductsForRegion(alaskaRegion, numProductsPerRegion, optimized);
 
   logger.info('Creating Rio region...');
   const rioRegion = await Region.create({
@@ -69,7 +84,7 @@ const createRegionsWithProducts = async (
     products: [],
   });
 
-  await createProductsForRegion(rioRegion, numProductsPerRegion);
+  await createProductsForRegion(rioRegion, numProductsPerRegion, optimized);
 
   logger.info('Regions and products created!');
 };
