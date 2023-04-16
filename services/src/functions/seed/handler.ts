@@ -17,7 +17,7 @@ const seed: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   // https://mongoosejs.com/docs/lambda.html
   context.callbackWaitsForEmptyEventLoop = false;
 
-  const { numProductsPerRegion = 10000 } = event.body || {};
+  const { numProductsPerRegion = 100000 } = event.body || {};
   const { optimized = false } = event.queryStringParameters || {};
   const optimizedFlag = optimized === 'true';
 

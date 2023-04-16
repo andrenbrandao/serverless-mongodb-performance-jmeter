@@ -6,13 +6,11 @@ import Product from '@/models/Product';
 import Region, { IRegion } from '@/models/Region';
 import { logger } from '@/shared/logger';
 
-const createProductsForRegion = async (
-  region: IRegion,
+async function createBatch(
   numProducts: number,
   optimized: boolean,
-) => {
-  logger.info(`Creating ${numProducts} products for region ${region.name}`);
-
+  region: IRegion,
+) {
   const products = [];
   const productPricesData = [];
   for (let i = 0; i < numProducts; i += 1) {
@@ -53,9 +51,41 @@ const createProductsForRegion = async (
       $push: { products: { $each: productPricesData } },
     },
   );
+}
+
+const createProductsForRegion = async (
+  region: IRegion,
+  numProducts: number,
+  optimized: boolean,
+) => {
+  const batchSize = 10000;
+  logger.info(`Creating ${numProducts} products for region ${region.name}`);
+
+  const numBatches = Math.ceil(numProducts / batchSize);
+  logger.info(`Inserting ${numBatches} batches of ${batchSize} products`);
+
+  let numProductsLeft = numProducts;
+  for (let i = 0; i < numBatches; i += 1) {
+    logger.info(
+      `Inserting batch number ${i + 1} of total of ${numBatches} batches`,
+    );
+    const currentBatchSize =
+      numProductsLeft > batchSize ? batchSize : numProductsLeft;
+    // eslint-disable-next-line no-await-in-loop
+    await createBatch(currentBatchSize, optimized, region);
+    numProductsLeft -= batchSize;
+  }
 
   logger.info(`Products created for region ${region.name}!`);
 };
+
+async function createRegion(name: string): Promise<IRegion> {
+  logger.info(`Creationg ${name} region...`);
+  return Region.create({
+    name,
+    products: [],
+  });
+}
 
 const createRegionsWithProducts = async (
   numProductsPerRegion = 10000,
@@ -70,20 +100,10 @@ const createRegionsWithProducts = async (
   logger.info('Deleting all regions...');
   await Region.deleteMany();
 
-  logger.info('Creating Alaska region...');
-  const alaskaRegion = await Region.create({
-    name: 'Alaska',
-    products: [],
-  });
-
+  const alaskaRegion = await createRegion('Alaska');
   await createProductsForRegion(alaskaRegion, numProductsPerRegion, optimized);
 
-  logger.info('Creating Rio region...');
-  const rioRegion = await Region.create({
-    name: 'Rio',
-    products: [],
-  });
-
+  const rioRegion = await createRegion('Rio');
   await createProductsForRegion(rioRegion, numProductsPerRegion, optimized);
 
   logger.info('Regions and products created!');

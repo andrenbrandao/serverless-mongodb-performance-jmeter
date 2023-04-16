@@ -8,5 +8,5 @@ export default {
       },
     },
   ],
-  timeout: 30,
+  timeout: 300,
 };
