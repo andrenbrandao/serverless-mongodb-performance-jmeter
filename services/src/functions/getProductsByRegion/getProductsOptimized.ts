@@ -8,13 +8,13 @@ export async function getProductsOptimized(
   const mongoRegionId = new mongoose.Types.ObjectId(regionId);
   return Product.aggregate([
     { $match: { regions: { $elemMatch: { _id: mongoRegionId } } } },
+    { $limit: Number(limit) },
     {
       $unwind: '$regions',
     },
     {
       $match: { 'regions._id': mongoRegionId },
     },
-    { $limit: Number(limit) },
     {
       $project: {
         _id: 1,
