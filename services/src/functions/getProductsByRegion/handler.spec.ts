@@ -136,4 +136,42 @@ describe('Get Products By Region Handler', () => {
       ]),
     });
   });
+
+  it('should return 404 if region does not exist', async () => {
+    const context = {} as Context;
+    const callback = null as Callback;
+
+    await Product.create({
+      sku: '123456',
+      name: 'Jump Rope',
+      description:
+        'The perfect exercise tool for burning calories and improving coordination',
+    });
+
+    await Product.create({
+      sku: '111111',
+      name: 'Running Shoes',
+      description: 'Special running shoes',
+    });
+
+    await Region.create({
+      name: 'Alaska',
+      products: [
+        { sku: '123456', price: 50.5 },
+        { sku: '111111', price: 105.99 },
+      ],
+    });
+
+    const event = createEvent('aws:apiGateway', {
+      pathParameters: { id: '645c38d52f5c6ee098f9a39' },
+    });
+
+    const response: APIGatewayProxyResult = (await handler(
+      event,
+      context,
+      callback,
+    )) as APIGatewayProxyResult;
+
+    expect(response.statusCode).toEqual(404);
+  });
 });

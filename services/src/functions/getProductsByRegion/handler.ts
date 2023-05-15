@@ -6,6 +6,7 @@ import { middyfy } from '@/libs/lambda';
 import { getConnection } from '@/libs/mongodb';
 import { getProducts } from './getProducts';
 import { getProductsOptimized } from './getProductsOptimized';
+import { getRegionById } from './getRegionById';
 
 const getProductsByRegion: APIGatewayProxyHandler = async (event, context) => {
   // Make sure to add this so you can re-use `conn` between function calls.
@@ -19,6 +20,15 @@ const getProductsByRegion: APIGatewayProxyHandler = async (event, context) => {
   const optimizedFlag = optimized === 'true';
 
   await getConnection();
+
+  const region = await getRegionById(regionId);
+  if (!region) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({ message: 'Region not found' }),
+    };
+  }
+
   let products;
   if (optimizedFlag) {
     products = await getProductsOptimized(regionId, limit);
