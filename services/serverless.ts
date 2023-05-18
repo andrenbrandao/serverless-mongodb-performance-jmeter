@@ -15,7 +15,13 @@ const serverlessConfiguration: AWS = {
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
-      includeModules: true,
+      includeModules: {
+        forceInclude: [
+          '@honeycombio/opentelemetry-node',
+          '@opentelemetry/api',
+          '@opentelemetry/auto-instrumentations-node',
+        ],
+      },
       packager: 'yarn',
     },
     stage: '${opt:stage, self:provider.stage}',
@@ -90,7 +96,10 @@ const serverlessConfiguration: AWS = {
       },
     },
     environment: {
+      NODE_OPTIONS: '--require tracing.js',
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      OTEL_SERVICE_NAME: 'serverless-mongodb-performance',
+      HONEYCOMB_API_KEY: 'SECRET',
     },
     lambdaHashingVersion: '20201221',
   },
