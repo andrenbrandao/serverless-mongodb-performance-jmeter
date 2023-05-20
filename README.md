@@ -1,6 +1,6 @@
 # MongoStore - Simple e-commerce app
 
-This code is used in the article "How to Fix Performance Bottlenecks in MongoDB with JMeter".
+This code is used in the article "How To Find Bottlenecks in MongoDB: Profiling and Load Testing Strategies with JMeter".
 
 ## How to Deploy
 
