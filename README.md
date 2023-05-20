@@ -2,6 +2,8 @@
 
 This code is used in the article "How To Find Bottlenecks in MongoDB: Profiling and Load Testing Strategies with JMeter".
 
+The MongoDB setup in this project does not follow the best practices to be production-ready. Please, refer to the [MongoDB Security Checklist](https://www.mongodb.com/docs/manual/administration/security-checklist/).
+
 ## How to Deploy
 
 First, deploy the infrastructure with the MongoDB Cluster. 
